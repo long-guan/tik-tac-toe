@@ -1,0 +1,209 @@
+from IPython.display import clear_output
+
+#let's player choose between X or O    
+def game_prompt():
+    
+    player1 = input('Welcome to the game of Tic Tac Toe. Player 1, do you want to be be X or O: ')
+    
+    #keeps asking player 1 for the correct marker
+    while player1 != 'O' and player1 != 'X':
+        player1 = input('Invalid selection. Please choose X or O: ')
+    
+    return player1
+    
+#assigns marker to player 2 and let's player know what piece they will be and who will go first
+def assign_piece(player1):
+    
+    if player1 == 'X':
+        player2 = 'O'
+    else:
+        player2 = 'X'
+    
+    print("Let's play! Player 1 will go first as " + player1 + " and player 2 will go second as " + player2)
+    print('')
+
+    return (player2)
+    
+#prints out the board using the list position
+def print_board(position):
+    clear_output()
+    print(position[0] + '|' + position[1] + '|' + position[2])
+    print('_____')
+    print(position[3] + '|' + position[4] + '|' + position[5])
+    print('_____')
+    print(position[6] + '|' + position[7] + '|' + position[8])
+    
+    
+#let player 1 choose a move and display it after, check for win
+def move_player1(player1, number_of_moves):
+    move = int(check_move1(position))
+    position[move - 1] = player1
+    print('')
+    print('')
+    print_board(position)
+    
+    #sets number_of_moves greater than 9 to stop the game
+    if check_win_player1(position) == True:
+        number_of_moves = 10
+        return number_of_moves
+    
+    number_of_moves += 1
+    
+    #checks if it is a tie
+    if check_win_player2(position) == False and number_of_moves >= 9:
+        print('The game is a tie!')
+    return number_of_moves  
+
+#let player 2 choose a move and display it after, check for win
+def move_player2(player2, number_of_moves):
+    move = int(check_move2(position))
+    position[move - 1] = player2
+    print('')
+    print('')
+    print_board(position)
+    
+    #sets number_of_moves greater than 9 to stop the game
+    if check_win_player2(position) == True:
+        number_of_moves = 10
+        return number_of_moves
+    
+    number_of_moves += 1
+    
+    #checks if it is a tie
+    if check_win_player2(position) == False and number_of_moves >= 9:
+        print('The game is a tie!')
+    return number_of_moves  
+
+#repeats move until board is move and dictates whose turn it is
+def fill_board(player1, player2):
+    number_of_moves = 0
+    
+    while number_of_moves < 9:
+        if number_of_moves % 2 == 0:
+            number_of_moves = move_player1(player1, number_of_moves)
+        else:
+            number_of_moves = move_player2(player2, number_of_moves)
+        
+    
+#check for win for player 1
+def check_win_player1(position):
+    if position[0] == position[1] == position[2]:
+        print('Player 1 Won')
+        return True
+    elif position[3] == position[4] == position[5]:
+        print('Player 1 Won')
+        return True
+    elif position[6] == position[7] == position[8]:
+        print('Player 1 Won')
+        return True
+    elif position[0] == position[3] == position[6]:
+        print('Player 1 Won')
+        return True
+    elif position[1] == position[4] == position[7]:
+        print('Player 1 Won')
+        return True
+    elif position[2] == position[5] == position[8]:
+        print('Player 1 Won')
+        return True
+    elif position[0] == position[4] == position[8]:
+        print('Player 1 Won')
+        return True
+    elif position[2] == position[4] == position[6]:
+        print('Player 1 Won')
+        return True
+    else:
+        return False
+        
+#check for win for player 2
+def check_win_player2(position):
+    if position[0] == position[1] == position[2]:
+        print('Player 2 Won')
+        return True
+    elif position[3] == position[4] == position[5]:
+        print('Player 2 Won')
+        return True
+    elif position[6] == position[7] == position[8]:
+        print('Player 2 Won')
+        return True
+    elif position[0] == position[3] == position[6]:
+        print('Player 2 Won')
+        return True
+    elif position[1] == position[4] == position[7]:
+        print('Player 2 Won')
+        return True
+    elif position[2] == position[5] == position[8]:
+        print('Player 2 Won')
+        return True
+    elif position[0] == position[4] == position[8]:
+        print('Player 2 Won')
+        return True
+    elif position[2] == position[4] == position[6]:
+        print('Player 2 Won')
+        return True
+    else:
+        return False
+    
+#check if move chosen by player 1 is valid and returns that move if it is valid
+def check_move1(position):
+    choice = input('Player 1, choose a position on the board by selecting the number: ')
+    
+    #if choice is not a digit, then it asks again
+    while choice.isdigit() == False:
+        choice = input('This move is invalid, please choose a valid move: ')
+        
+    #check if choice is within 1 to 9
+    while int(choice) < 1 or int(choice) > 9:
+        choice = input('This is not within the range of moves, please choose a valid move: ')
+        
+    #if choice is already taken on the board
+    while position[int(choice) - 1] == 'X' or position[int(choice) - 1] == 'O':
+        choice = input('This move is already taken on the board, please choose another move: ')
+    
+    return choice
+
+#check if move chosen by player 2 is valid and returns that move if it is valid
+def check_move2(position):
+    choice = input('Player 2, choose a position on the board by selecting the number: ')
+    
+    #check if choice is a digit
+    while choice.isdigit() == False:
+        choice = input('This move is invalid, please choose a valid move: ')
+        
+    #check if choice is within 1 to 9
+    while int(choice) < 1 or int(choice) > 9:
+        choice = input('This is not within the range of moves, please choose a valid move: ')
+    
+    #check if choice is already taken on the board
+    while position[int(choice) - 1] == 'X' or position[int(choice) - 1] == 'O':
+        choice = input('This move is already taken on the board, please choose another move: ')
+        
+    return choice
+    
+#function to run the whole game
+def whole_game(position):
+    
+    player1 = game_prompt()
+    player2 = assign_piece(player1)
+    print_board(position)
+    fill_board(player1, player2)
+
+game_condition = True
+
+#while loop to start game again
+while game_condition == True:
+    position = ['1','2','3','4','5','6','7','8','9']
+    whole_game(position)
+    play_again = input('Do you want to play again, yes or no?: ')
+    
+    #makes sure the answer is yes or no
+    while play_again not in ['yes', 'no']:
+        play_again = input('Invalid choice, please choose yes or no: ')
+    
+    #resets the position or stops the game
+    if play_again.lower() == 'yes':
+        position = ['1','2','3','4','5','6','7','8','9']
+    else:
+        game_condition = False
+        print('Thanks for playing! :)')
+    
+    
